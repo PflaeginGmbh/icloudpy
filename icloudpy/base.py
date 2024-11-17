@@ -35,11 +35,15 @@ from icloudpy.utils import get_password_from_keyring
 
 LOGGER = logging.getLogger(__name__)
 
+
+# https://github.com/picklepete/pyicloud/pull/460/files
 HEADER_DATA = {
     "X-Apple-ID-Account-Country": "account_country",
     "X-Apple-ID-Session-Id": "session_id",
     "X-Apple-Session-Token": "session_token",
     "X-Apple-TwoSV-Trust-Token": "trust_token",
+    "X-Apple-I-Rscd": "apple_rscd",
+    "X-Apple-I-Ercd": "apple_ercd",
     "scnt": "scnt",
 }
 
@@ -400,6 +404,8 @@ class ICloudPyService:
                 raise ICloudPyFailedLoginException(msg, error) from error
 
             self._authenticate_with_token()
+
+        self.params.update({'dsid': self.data['dsInfo']['dsid']})
 
         self._webservices = self.data["webservices"]
 
